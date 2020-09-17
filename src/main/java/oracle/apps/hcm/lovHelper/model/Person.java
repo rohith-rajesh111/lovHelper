@@ -5,28 +5,25 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @Entity
 @Table(name="CUSTOM_PERSON")
+@JsonNaming(PropertyNamingStrategy.UpperCamelCaseStrategy.class)
 public class Person {
 	
 	@Id
-	@JsonProperty ("PersonId") 
 	private Long PersonId;
 	
-	@JsonProperty ("PersonNumber") 
 	private String PersonNumber;
 	
-	@JsonProperty ("AssignmentId")
 	private Long AssignmentId;
 	
-	@JsonProperty ("DisplayName")
 	private String DisplayName;
 	
-	@JsonProperty ("ListName")
 	private String ListName;
 	
-	@JsonProperty ("AssignmentNumber")
 	private String AssignmentNumber;
 	
 	@JsonProperty ("PersonIdAsString")

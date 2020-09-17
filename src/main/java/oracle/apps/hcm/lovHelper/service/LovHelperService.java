@@ -8,8 +8,14 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import oracle.apps.hcm.lovHelper.controller.ContentItemPageRepository;
+import oracle.apps.hcm.lovHelper.controller.ContentItemRepository;
 import oracle.apps.hcm.lovHelper.controller.LovHelperRepository;
 import oracle.apps.hcm.lovHelper.model.*;
 
@@ -18,6 +24,12 @@ public class LovHelperService {
 	
 	@Autowired
 	LovHelperRepository repo;
+	
+	@Autowired
+	ContentItemRepository contentItemRepo;
+	
+	@Autowired
+	ContentItemPageRepository pageRepo;
 	
 	@Autowired
 	private Environment env;
@@ -98,7 +110,9 @@ public class LovHelperService {
 	
 	public List<Person> getAllPersons2(){
 		
+		System.out.println("*****************************************************************");
 		System.out.println(">>>>>> CONNECTING TO DB TO FETCH RESULTS");
+		System.out.println("*****************************************************************");
 		
 		List<Person> personList = new ArrayList<>();
 		
@@ -107,4 +121,25 @@ public class LovHelperService {
 		return personList;
 	}
 
+	
+	public List<ContentItem> getContentItems(Long contentTypeId){
+		
+		
+		System.out.println("*****************************************************************");
+		System.out.println("\n\n LOADING DATA FROM FUSION.CUSTOM_CONTENT_ITEM \n\n");
+		System.out.println("\n\n >>> CONTENT_TYPE_ID = "+contentTypeId+"\n\n");
+		System.out.println("*****************************************************************");
+		
+		return contentItemRepo.findByContentTypeId(contentTypeId);
+	}
+	
+	public Page<ContentItem> getContentItemsPaged(Long contentTypeId, Pageable pageable) {
+		
+		List<ContentItem> list2 = new ArrayList<ContentItem>();
+		pageRepo.findAllByContentTypeId(contentTypeId,pageable).forEach(list2::add);
+		Page<ContentItem> pages = new PageImpl<ContentItem>(list2);
+		
+		return pages;
+	}
+	
 }
